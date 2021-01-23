@@ -1,4 +1,4 @@
-include $(TOPDIR)/rules.mk 
+include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-clash
 PKG_VERSION:=v1.8.0
@@ -9,7 +9,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/$(PKG_NAME)
 	SECTION:=luci
 	CATEGORY:=LuCI
-	SUBMENU:=2. Clash For OpenWRT
+	SUBMENU:=3. Applications
 	TITLE:=LuCI app for clash
 	DEPENDS:=+luci-base +wget +iptables +coreutils-base64 +coreutils +coreutils-nohup +bash +ipset +libustream-openssl +curl +jsonfilter +ca-certificates +iptables-mod-tproxy +kmod-tun
 	PKGARCH:=all
@@ -84,6 +84,9 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	mv /usr/share/clashbackup/config.bak2 /usr/share/clash/config/upload/config.yaml 2>/dev/null
 	mv /usr/share/clashbackup/config.bak3 /usr/share/clash/config/custom/config.yaml 2>/dev/null
 	mv /usr/share/clashbackup/rule.bak /usr/share/clash/rule.yaml 2>/dev/null
+	if [ ! -e "/etc/clash/dashboard" ]; then
+		ln -s /usr/share/clash/dashboard /etc/clash/dashboard
+	fi
 	/etc/init.d/clash disable 2>/dev/null
 fi
 /etc/init.d/clash disable 2>/dev/null
@@ -95,14 +98,14 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/config
-	
+
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/dns
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/client
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/game
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/geoip
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/logs
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/clash/update
-	
+
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/clash
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/i18n
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -111,13 +114,13 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci
 	$(INSTALL_DIR) $(1)/usr/share/
 	$(INSTALL_DIR) $(1)/usr/share/clash
-	$(INSTALL_DIR) $(1)/usr/share/rpcd	
-	$(INSTALL_DIR) $(1)/usr/share/rpcd/acl.d	
+	$(INSTALL_DIR) $(1)/usr/share/rpcd
+	$(INSTALL_DIR) $(1)/usr/share/rpcd/acl.d
+	$(INSTALL_DIR) $(1)/usr/share/clash/dashboard
+	$(INSTALL_DIR) $(1)/usr/share/clash/dashboard/img
+	$(INSTALL_DIR) $(1)/usr/share/clash/dashboard/js
 	$(INSTALL_DIR) $(1)/usr/share/clash/rules
 	$(INSTALL_DIR) $(1)/usr/share/clash/rules/g_rules
-	$(INSTALL_DIR) $(1)/etc/clash/dashboard
-	$(INSTALL_DIR) $(1)/etc/clash/dashboard/img
-	$(INSTALL_DIR) $(1)/etc/clash/dashboard/js
 	$(INSTALL_DIR) $(1)/usr/share/clash/yacd
 	$(INSTALL_DIR) $(1)/etc/clash/clashtun
 	$(INSTALL_DIR) $(1)/etc/clash/dtun
@@ -131,7 +134,6 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/share/clash/config/upload
 	$(INSTALL_DIR) $(1)/usr/share/clash/config/custom
 
-	
 	$(INSTALL_BIN) 	./root/etc/init.d/clash $(1)/etc/init.d/clash
 	$(INSTALL_CONF) ./root/etc/config/clash $(1)/etc/config/clash
 	$(INSTALL_CONF) ./root/etc/clash/Country.mmdb $(1)/etc/clash
@@ -140,7 +142,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./root/usr/share/rpcd/acl.d/luci-app-clash.json $(1)/usr/share/rpcd/acl.d
 	$(INSTALL_BIN) ./root/usr/share/clash/rules/g_rules/Steam.rules $(1)/usr/share/clash/rules/g_rules
 	$(INSTALL_BIN) ./root//usr/share/clash/rules/rules.list $(1)/usr/share/clash/rules
-	
+
 	$(INSTALL_BIN) ./root/usr/share/clash/luci_version $(1)/usr/share/clash
 	$(INSTALL_BIN) ./root/usr/share/clash/rule.yaml $(1)/usr/share/clash
 	$(INSTALL_BIN) ./root/usr/share/clash/server.list $(1)/usr/share/clash
@@ -149,14 +151,12 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./root/usr/share/clash/clash.txt $(1)/usr/share/clash
 	$(INSTALL_BIN) ./root/usr/share/clash/chinaipset.sh $(1)/usr/share/clash
 	$(INSTALL_BIN) ./root/usr/share/clash/china_ip.txt $(1)/usr/share/clash
-	
-	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/index.html $(1)/etc/clash/dashboard
-	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/main.658aa6a6e3feec8f168b.css $(1)/etc/clash/dashboard
-	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/img/ffac0fa1d89f15922b4594863b8b32e9.png $(1)/etc/clash/dashboard/img
-	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/js/1.bundle.658aa6a6e3feec8f168b.min.js $(1)/etc/clash/dashboard/js
-	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/js/bundle.658aa6a6e3feec8f168b.min.js $(1)/etc/clash/dashboard/js
+
+	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/*.* $(1)/usr/share/clash/dashboard
+	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/img/* $(1)/usr/share/clash/dashboard/img
+	$(INSTALL_BIN) ./root/usr/share/clash/dashboard/js/* $(1)/usr/share/clash/dashboard/js
 	$(INSTALL_BIN) ./root/usr/share/clash/yacd/* $(1)/usr/share/clash/yacd
-	
+
 	$(INSTALL_DATA) ./luasrc/clash.lua $(1)/usr/lib/lua/luci
 	$(INSTALL_DATA) ./luasrc/controller/*.lua $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DATA) ./luasrc/model/cbi/clash/*.lua $(1)/usr/lib/lua/luci/model/cbi/clash
