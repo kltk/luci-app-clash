@@ -24,7 +24,7 @@ local dsp = require "luci.dispatcher"
 					
 			}
 		);
-		XHR.poll(20,'<%=dsp.build_url("admin", "services", "clash", "ping")%>',{
+		XHR.poll(21,'<%=dsp.build_url("admin", "services", "clash", "ping")%>',{
 				index: i,
 				domain: pings[i].getAttribute("hint")
 			},
