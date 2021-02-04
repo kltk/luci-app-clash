@@ -310,14 +310,14 @@
 							throw error;
 						}),
 				  parseIPIpip: (ip, elID) => {
-						IP.get(`https://geoip.gbxcloud.com/?geoip=${ip}`, 'text')
+						IP.get(`//geoip.gbxcloud.com/?geoip=${ip}`, 'text')
 							.then(resp => {
 								 document.getElementById(elID).innerHTML = resp.data;
 							})
 					},
 
 					getIpipnetIP: () => {
-						IP.get(`http://myip.ipip.net/?z=${random}`, 'text')
+						IP.get(`//myip.ipip.net/?z=${random}`, 'text')
 							.then((resp) => {
 								let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
 								//var u= data[0].indexOf("来自于：")
@@ -331,7 +331,7 @@
 					
 					
 					getIpifyIP: () => {
-						IP.get(`https://ip4.seeip.org/json?z=${random}`, 'json')
+						IP.get(`//ip4.seeip.org/json?z=${random}`, 'json')
 						.then(resp => {
 						document.getElementById('ip-ipify').innerHTML = `${resp.data.ip} - `;
 							return resp.data.ip
@@ -374,7 +374,7 @@
 							throw error;
 						}),
 					Ipip: (ip, elID) => {
-						IP.get(`https://api.ip.sb/geoip/${ip}`, 'json')
+						IP.get(`//api.ip.sb/geoip/${ip}`, 'json')
 							.then(resp => {
 								 document.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.region} ${resp.data.city} ${resp.data.isp} ${resp.data.asn_organization}`
 							})
@@ -383,7 +383,7 @@
 
 
 					getIpipnetIP: () => {
-						IP.get(`http://myip.ipip.net/?z=${random}`, 'text')
+						IP.get(`//myip.ipip.net/?z=${random}`, 'text')
 							.then((resp) => {
 								let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
 								//var u= data[0].indexOf("来自于：")
@@ -397,7 +397,7 @@
 					
 					
 					getIpifyIP: () => {
-						IP.get(`https://ip4.seeip.org/json?z=${random}`, 'json')
+						IP.get(`//ip4.seeip.org/json?z=${random}`, 'json')
 						.then(resp => {
 						document.getElementById('d-ip-g').innerHTML = `${resp.data.ip} - `;
 							return resp.data.ip
@@ -429,7 +429,7 @@
 					clearTimeout(timeout);
 					document.getElementById(cbElID).innerHTML = '<b class="green"><%:NORMAL%></b>'
 				}
-				img.src = `https://${domain}/favicon.ico?${+(new Date)}`
+				img.src = `//${domain}/favicon.ico?${+(new Date)}`
 			}
 
 	    }
