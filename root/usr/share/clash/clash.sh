@@ -1,4 +1,5 @@
 #!/bin/bash /etc/rc.common
+. /usr/lib/clash/functions.sh
 
 clash_url=$(uci get clash.config.clash_url 2>/dev/null)
 ssr_url=$(uci get clash.config.ssr_url 2>/dev/null)
@@ -50,14 +51,14 @@ else
   sleep 1
 
   if [ "$subtype" = "clash" ]; then
-    wget -c4 --no-check-certificate --user-agent="Clash/OpenWRT" "$clash_url" -O $CONFIG_YAML 2>&1
+    ensure_download $clash_url $CONFIG_YAML -c4
     if [ "$?" -eq "0" ]; then
       echo "${config_name}.yaml#$clash_url#$subtype" >>/usr/share/clashbackup/confit_list.conf
     fi
   fi
 
   if [ "$subtype" = "ssr2clash" ]; then
-    wget -c4 --no-check-certificate --user-agent="Clash/OpenWRT" "https://gfwsb.114514.best/sub?target=clashr&url=$ssr_url" -O $CONFIG_YAML 2>&1
+    ensure_download "https://gfwsb.114514.best/sub?target=clashr&url=$ssr_url" $CONFIG_YAML -c4
     if [ "$?" -eq "0" ]; then
       echo "${config_name}.yaml#$ssr_url#$subtype" >>/usr/share/clashbackup/confit_list.conf
       CONFIG_YAMLL="/tmp/conf"
@@ -102,7 +103,7 @@ else
   fi
 
   if [ "$subtype" = "v2clash" ]; then
-    wget -c4 --no-check-certificate --user-agent="Clash/OpenWRT" "https://tgbot.lbyczf.com/v2rayn2clash?url=$v2_url" -O $CONFIG_YAML 2>&1
+    ensure_download "https://tgbot.lbyczf.com/v2rayn2clash?url=$v2_url" $CONFIG_YAML -c4
     if [ "$?" -eq "0" ]; then
       echo "${config_name}.yaml#$v2_url#$subtype" >>/usr/share/clashbackup/confit_list.conf
     fi

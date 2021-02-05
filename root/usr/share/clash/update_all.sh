@@ -1,4 +1,5 @@
 #!/bin/bash /etc/rc.common
+. /usr/lib/clash/functions.sh
 . /lib/functions.sh
 
 c_type=$(uci get clash.config.config_type 2>/dev/null)
@@ -23,7 +24,7 @@ while [[ $count_nums -le $countt ]]; do
     elif [ $lang == "zh_cn" ]; then
       echo "开始更新配置" >$REAL_LOG
     fi
-    wget --no-check-certificate --user-agent="Clash/OpenWRT" $url -O $CONFIG_YAML 2>&1
+    ensure_download $url $CONFIG_YAML
     sleep 3
     if [ "$?" -eq "0" ]; then
       if [ $lang == "en" ] || [ $lang == "auto" ]; then
@@ -47,7 +48,7 @@ while [[ $count_nums -le $countt ]]; do
     elif [ $lang == "zh_cn" ]; then
       echo "开始更新配置" >$REAL_LOG
     fi
-    wget --no-check-certificate --user-agent="Clash/OpenWRT" "https://ssrsub2clashr.herokuapp.com/ssrsub2clash?sub=$url" -O $CONFIG_YAML 2>&1
+    ensure_download "https://ssrsub2clashr.herokuapp.com/ssrsub2clash?sub=$url" $CONFIG_YAML
     sleep 3
     if [ "$?" -eq "0" ]; then
 
@@ -109,7 +110,7 @@ while [[ $count_nums -le $countt ]]; do
     elif [ $lang == "zh_cn" ]; then
       echo "开始更新配置" >$REAL_LOG
     fi
-    wget --no-check-certificate --user-agent="Clash/OpenWRT" "https://tgbot.lbyczf.com/v2rayn2clash?url=$url" -O $CONFIG_YAML 2>&1
+    ensure_download "https://tgbot.lbyczf.com/v2rayn2clash?url=$url" $CONFIG_YAML
     sleep 3
     if [ "$?" -eq "0" ]; then
       if [ $lang == "en" ] || [ $lang == "auto" ]; then

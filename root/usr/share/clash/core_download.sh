@@ -1,4 +1,6 @@
 #!/bin/sh
+. /usr/lib/clash/functions.sh
+
 LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
 LOG_FILE="/tmp/clash_update.txt"
 MODELTYPE=$(uci get clash.config.download_core 2>/dev/null)
@@ -92,11 +94,11 @@ update() {
     echo "  ${LOGTIME} - Starting Clash Core download" >$LOG_FILE
   fi
   if [ $CORETYPE -eq 1 ]; then
-    wget --no-check-certificate https://github.com/frainzy1477/clash_dev/releases/download/"$CLASHVER"/clash-"$MODELTYPE".gz -O /tmp/clash.gz 2>&1
+    ensure_download "https://github.com/frainzy1477/clash_dev/releases/download/$CLASHVER/clash-$MODELTYPE.gz" /tmp/clash.gz
   elif [ $CORETYPE -eq 3 ]; then
-    wget --no-check-certificate https://github.com/frainzy1477/clashtun/releases/download/"$CLASHTUN"/clash-"$MODELTYPE".gz -O /tmp/clash.gz 2>&1
+    ensure_download "https://github.com/frainzy1477/clashtun/releases/download/$CLASHTUN/clash-$MODELTYPE.gz" /tmp/clash.gz
   elif [ $CORETYPE -eq 4 ]; then
-    wget --no-check-certificate https://github.com/frainzy1477/clashdtun/releases/download/"$CLASHDTUNC"/clash-"$MODELTYPE".gz -O /tmp/clash.gz 2>&1
+    ensure_download "https://github.com/frainzy1477/clashdtun/releases/download/$CLASHDTUNC/clash-$MODELTYPE.gz" /tmp/clash.gz
   fi
 
   if [ "$?" -eq "0" ] && [ "$(ls -l /tmp/clash.gz | awk '{print int($5)}')" -ne 0 ]; then
