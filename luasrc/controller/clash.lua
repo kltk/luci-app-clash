@@ -167,16 +167,16 @@ local function localip()
 end
 
 local function check_version()
-	return luci.sys.exec("sh /usr/share/clash/check_luci_version.sh")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh check_version luci frainzy1477 luci-app-clash")
 end
 
 local function check_core()
-	return luci.sys.exec("sh /usr/share/clash/check_core_version.sh")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh check_version core frainzy1477 clash_dev")
 end
 
 
 local function check_clashtun_core()
-	return luci.sys.exec("sh /usr/share/clash/check_clashtun_core_version.sh")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh check_version clashtun_core frainzy1477 clashtun")
 end
 
 local function current_version()
@@ -184,24 +184,24 @@ local function current_version()
 end
 
 local function new_version()
-	return luci.sys.exec("sed -n 1p /usr/share/clash/new_luci_version")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh get_version luci")
 end
 
 local function new_core_version()
-	return luci.sys.exec("sed -n 1p /usr/share/clash/new_core_version")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh get_version core")
 end
 
 
 local function new_clashtun_core_version()
-	return luci.sys.exec("sed -n 1p /usr/share/clash/new_clashtun_core_version")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh get_version clashtun_core")
 end
 
 local function check_dtun_core()
-	return luci.sys.call(string.format("sh /usr/share/clash/check_dtun_core_version.sh"))
+	return luci.sys.call(string.format("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh check_version dtun_core frainzy1477 clashdtun"))
 end
 
 local function new_dtun_core()
-	return luci.sys.exec("sed -n 1p /usr/share/clash/new_clashdtun_core_version")
+	return luci.sys.exec("sh /usr/share/clash/bin/call_fun.sh /usr/lib/clash/functions.sh get_version dtun_core")
 end
 
 local function e_mode()
