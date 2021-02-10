@@ -5,10 +5,8 @@ sleep 2
 if [ "$?" -eq "0" ]; then
   rm -rf /usr/share/clash/new_clashdtun_core_version
   if [ $new_clashdtun_core_version ]; then
-    echo $new_clashdtun_core_version >/usr/share/clash/new_clashdtun_core_version 2>&1 &
-    >/dev/null
+    echo $new_clashdtun_core_version >/usr/share/clash/new_clashdtun_core_version 2>&1
   elif [ $new_clashdtun_core_version =="" ]; then
-    echo 0 >/usr/share/clash/new_clashdtun_core_version 2>&1 &
-    >/dev/null
+    echo 0 >/usr/share/clash/new_clashdtun_core_version 2>&1
   fi
 fi

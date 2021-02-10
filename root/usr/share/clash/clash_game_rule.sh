@@ -19,7 +19,7 @@ elif [ $lang == "zh_cn" ]; then
   echo "开始下载【$RULE_FILE_NAME】规则..." >$REAL_LOG
 fi
 
-wget --no-check-certificate -c4 https://raw.githubusercontent.com/FQrabbit/SSTap-Rule/master/rules/"$DOWNLOAD_PATH" -O "$TMP_RULE_DIR" 2>&1 >1
+wget --no-check-certificate -c4 https://raw.githubusercontent.com/FQrabbit/SSTap-Rule/master/rules/"$DOWNLOAD_PATH" -O "$TMP_RULE_DIR" 2>&1
 
 if [ "$?" -eq "0" ] && [ "$(ls -l $TMP_RULE_DIR | awk '{print $5}')" -ne 0 ]; then
 

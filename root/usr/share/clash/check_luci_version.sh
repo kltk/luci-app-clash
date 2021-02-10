@@ -4,10 +4,8 @@ new_version=$(curl -sL "https://github.com/frainzy1477/luci-app-clash/tags" | gr
 if [ "$?" -eq "0" ]; then
   rm -rf /usr/share/clash/new_luci_version
   if [ $new_version ]; then
-    echo $new_version >/usr/share/clash/new_luci_version 2>&1 &
-    >/dev/null
+    echo $new_version >/usr/share/clash/new_luci_version 2>&1
   elif [ $new_version =="" ]; then
-    echo 0 >/usr/share/clash/new_luci_version 2>&1 &
-    >/dev/null
+    echo 0 >/usr/share/clash/new_luci_version 2>&1
   fi
 fi
