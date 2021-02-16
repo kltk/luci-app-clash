@@ -84,9 +84,13 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	mv /usr/share/clashbackup/config.bak2 /usr/share/clash/config/upload/config.yaml 2>/dev/null
 	mv /usr/share/clashbackup/config.bak3 /usr/share/clash/config/custom/config.yaml 2>/dev/null
 	mv /usr/share/clashbackup/rule.bak /usr/share/clash/rule.yaml 2>/dev/null
-	if [ ! -e "/etc/clash/dashboard" ]; then
-		ln -s /usr/share/clash/dashboard /etc/clash/dashboard
-	fi
+  mkdir -p /usr/share/clash
+  if [ ! -e "/www/luci-static/clash" ]; then
+    ln -s /usr/share/clash/dashboard /www/luci-static/clash/dashboard
+  fi
+  if [ ! -e "/www/luci-static/yacd" ]; then
+    ln -s /usr/share/clash/yacd /www/luci-static/clash/yacd
+  fi
 	/etc/init.d/clash disable 2>/dev/null
 fi
 /etc/init.d/clash disable 2>/dev/null

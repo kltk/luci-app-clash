@@ -598,7 +598,6 @@ start() {
             echo "Clash 计划任务,启动进程守护程序..." >$REAL_LOG
           fi
         fi
-        ln -s /usr/share/clash/yacd /www/luci-static/yacd 2>/dev/null
 
         if [ "${lang}" == "en" ] || [ $lang == "auto" ]; then
           echo "Setting up clash iptables rules" >$REAL_LOG
