@@ -1,12 +1,10 @@
 #!/bin/bash /etc/rc.common
 . /usr/lib/clash/functions.sh
-. /lib/functions.sh
 
 config_name=$(uci get clash.config.config_update_name 2>/dev/null)
 CONFIG_YAML="/usr/share/clash/config/sub/${config_name}"
 url=$(grep -F "${config_name}" "/usr/share/clashbackup/confit_list.conf" | awk -F '#' '{print $2}')
 lang=$(uci get luci.main.lang 2>/dev/null)
-REAL_LOG="/usr/share/clash/clash_real.txt"
 c_type=$(uci get clash.config.config_type 2>/dev/null)
 path=$(uci get clash.config.use_config 2>/dev/null)
 type=$(grep -F "${config_name}" "/usr/share/clashbackup/confit_list.conf" | awk -F '#' '{print $3}')
@@ -14,22 +12,22 @@ type=$(grep -F "${config_name}" "/usr/share/clashbackup/confit_list.conf" | awk 
 if [ $type == "clash" ] && [ ! -z $url ]; then
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Updating Configuration..." >$REAL_LOG
+    echo "Updating Configuration..." >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "开始更新配置" >$REAL_LOG
+    echo "开始更新配置" >$LOG_REAL
   fi
   ensure_download $url $CONFIG_YAML
 
   if [ "$?" -eq "0" ]; then
     if [ $lang == "en" ] || [ $lang == "auto" ]; then
-      echo "Updating Configuration Completed" >$REAL_LOG
+      echo "Updating Configuration Completed" >$LOG_REAL
 
     elif [ $lang == "zh_cn" ]; then
-      echo "更新配置完成" >$REAL_LOG
+      echo "更新配置完成" >$LOG_REAL
 
     fi
     sleep 1
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
     sleep 2
     use_config=$(uci get clash.config.use_config 2>/dev/null)
 
@@ -45,9 +43,9 @@ fi
 if [ $type == "ssr2clash" ] && [ ! -z $url ]; then
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Updating Configuration..." >$REAL_LOG
+    echo "Updating Configuration..." >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "开始更新配置" >$REAL_LOG
+    echo "开始更新配置" >$LOG_REAL
   fi
   ensure_download "https://ssrsub2clashr.herokuapp.com/ssrsub2clash?sub=$url" $CONFIG_YAML
 
@@ -91,14 +89,14 @@ if [ $type == "ssr2clash" ] && [ ! -z $url ]; then
     fi
 
     if [ $lang == "en" ] || [ $lang == "auto" ]; then
-      echo "Updating Configuration Completed" >$REAL_LOG
+      echo "Updating Configuration Completed" >$LOG_REAL
 
     elif [ $lang == "zh_cn" ]; then
-      echo "更新配置完成" >$REAL_LOG
+      echo "更新配置完成" >$LOG_REAL
 
     fi
     sleep 1
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
     sleep 2
     use_config=$(uci get clash.config.use_config 2>/dev/null)
 
@@ -113,22 +111,22 @@ fi
 if [ $type == "v2clash" ] && [ ! -z $url ]; then
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Updating Configuration..." >$REAL_LOG
+    echo "Updating Configuration..." >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "开始更新配置" >$REAL_LOG
+    echo "开始更新配置" >$LOG_REAL
   fi
   ensure_download "https://tgbot.lbyczf.com/v2rayn2clash?url=$url" $CONFIG_YAML
 
   if [ "$?" -eq "0" ]; then
     if [ $lang == "en" ] || [ $lang == "auto" ]; then
-      echo "Updating Configuration Completed" >$REAL_LOG
+      echo "Updating Configuration Completed" >$LOG_REAL
 
     elif [ $lang == "zh_cn" ]; then
-      echo "更新配置完成" >$REAL_LOG
+      echo "更新配置完成" >$LOG_REAL
 
     fi
     sleep 1
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
     sleep 2
     use_config=$(uci get clash.config.use_config 2>/dev/null)
 

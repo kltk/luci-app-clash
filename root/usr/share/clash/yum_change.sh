@@ -1,12 +1,11 @@
 #!/bin/bash /etc/rc.common
-. /lib/functions.sh
+. /usr/lib/clash/functions.sh
 
 lang=$(uci get luci.main.lang 2>/dev/null)
-REAL_LOG="/usr/share/clash/clash_real.txt"
 if [ $lang == "en" ] || [ $lang == "auto" ]; then
-  echo "Setting DNS" >$REAL_LOG
+  echo "Setting DNS" >$LOG_REAL
 elif [ $lang == "zh_cn" ]; then
-  echo "设定DNS" >$REAL_LOG
+  echo "设定DNS" >$LOG_REAL
 fi
 
 mode=$(uci get clash.config.mode 2>/dev/null)
@@ -63,7 +62,7 @@ fi
 cat $CONFIG_START >>$TEMP_FILE 2>/dev/null
 if [ "$interf" -eq 1 ] && [ ! -z "$interf_name" ]; then
   cat >>"/tmp/interf_name.yaml" <<-EOF
-		interface-name: ${interf_name} 
+		interface-name: ${interf_name}
 	EOF
 
   cat /tmp/interf_name.yaml >>$TEMP_FILE 2>/dev/null
@@ -101,15 +100,15 @@ if [ "${tun_mode}" -eq 1 ]; then
 
     cat >>"/tmp/tun.yaml" <<-EOF
 			tun:
-			  enable: true 
-			  stack: ${stack}  
+			  enable: true
+			  stack: ${stack}
 		EOF
 
     if [ $core -eq 3 ]; then
 
       cat >>"/tmp/tun.yaml" <<-EOF
 				  device-url: dev://utun
-				  dns-listen: 0.0.0.0:${listen_port}   
+				  dns-listen: 0.0.0.0:${listen_port}
 			EOF
     fi
 
@@ -185,7 +184,7 @@ if [ "$enable_dns" -eq 1 ]; then
   cat >>"/tmp/enable_dns.yaml" <<-EOF
 		dns:
 		  enable: true
-		  listen: 0.0.0.0:${listen_port}   
+		  listen: 0.0.0.0:${listen_port}
 	EOF
 
   if [ "$enable_ipv6" == "true" ]; then
@@ -389,9 +388,9 @@ if [ "${fake_ip}" == "fake-ip" ]; then
   fi
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Setting Up Fake-IP Filter" >$REAL_LOG
+    echo "Setting Up Fake-IP Filter" >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "正在设置Fake-IP黑名单" >$REAL_LOG
+    echo "正在设置Fake-IP黑名单" >$LOG_REAL
   fi
 
   sed -i '/fake-ip-filter:/d' "/etc/clash/config.yaml" 2>/dev/null

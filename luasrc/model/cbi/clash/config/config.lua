@@ -6,9 +6,9 @@ local DISP = require "luci.dispatcher"
 local UTIL = require "luci.util"
 local uci = luci.model.uci.cursor()
 local fs = require "luci.clash"
+local clashEnv = require "luci.clash_env"
 local http = luci.http
 local clash = "clash"
-
 
 c = Map("clash")
 c.template="clash/conf"
@@ -103,7 +103,7 @@ end
 btnist.write=function(a,t)
 luci.sys.exec(string.format('uci set clash.config.config_update_name="%s"',e[t].name))
 luci.sys.exec('uci commit clash')
-luci.sys.exec('bash /usr/share/clash/update.sh >>/usr/share/clash/clash.txt 2>&1 &')
+luci.sys.exec('bash /usr/share/clash/update.sh >>' .. clashEnv.logFile .. ' 2>&1 &')
 luci.http.redirect(luci.dispatcher.build_url("admin", "services", "clash"))
 end
 

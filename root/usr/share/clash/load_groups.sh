@@ -1,5 +1,5 @@
 #!/bin/bash /etc/rc.common
-. /lib/functions.sh
+. /usr/lib/clash/functions.sh
 
 lang=$(uci get luci.main.lang 2>/dev/null)
 load="/tmp/config.yaml"
@@ -14,14 +14,13 @@ if [ ! -f $load ] || [ "$(ls -l $load | awk '{print int($5)}')" -eq 0 ]; then
 fi
 
 CFG_FILE="/etc/config/clash"
-REAL_LOG="/usr/share/clash/clash_real.txt"
 
 rm -rf /tmp/Proxy_Group /tmp/group_*.yaml /tmp/yaml_group.yaml 2>/dev/null
 
 if [ $lang == "zh_cn" ]; then
-  echo "开始更新策略组配置..." >$REAL_LOG
+  echo "开始更新策略组配置..." >$LOG_REAL
 elif [ $lang == "en" ] || [ $lang == "auto" ]; then
-  echo "Start updating policy group config" >$REAL_LOG
+  echo "Start updating policy group config" >$LOG_REAL
 fi
 
 sed -i 's/^Proxy Group:/proxy-groups:/g' "$load"
@@ -106,9 +105,9 @@ if [ -f /tmp/yaml_group.yaml ]; then
     #test_url
 
     if [ $lang == "en" ] || [ $lang == "auto" ]; then
-      echo "Now Reading 【$group_type】-【$group_name】 Policy Group..." >$REAL_LOG
+      echo "Now Reading 【$group_type】-【$group_name】 Policy Group..." >$LOG_REAL
     elif [ $lang == "zh_cn" ]; then
-      echo "正在读取【$group_type】-【$group_name】策略组配置..." >$REAL_LOG
+      echo "正在读取【$group_type】-【$group_name】策略组配置..." >$LOG_REAL
     fi
 
     name=clash
@@ -125,13 +124,13 @@ if [ -f /tmp/yaml_group.yaml ]; then
   uci commit clash
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Reading Policy Group Completed" >$REAL_LOG
+    echo "Reading Policy Group Completed" >$LOG_REAL
     sleep 2
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "读取策略组配置完成" >$REAL_LOG
+    echo "读取策略组配置完成" >$LOG_REAL
     sleep 2
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
   fi
 
   rm -rf /tmp/Proxy_Group /tmp/group_*.yaml /tmp/yaml_group.yaml $load 2>/dev/null

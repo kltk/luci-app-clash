@@ -6,7 +6,7 @@ geoip_source=$(uci get clash.config.geoip_source 2>/dev/null)
 if [ -f /var/run/geoip_down_complete ]; then
   rm -rf /var/run/geoip_down_complete 2>/dev/null
 fi
-echo '' >/tmp/geoip_update.txt 2>/dev/null
+echo '' >$LOG_UPDATE_GEOIP 2>/dev/null
 
 if [ $geoip_source == 1 ]; then
   ensure_download "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=$Key&suffix=tar.gz" /tmp/ipdb.tar.gz -c4 --timeout=300
@@ -21,7 +21,7 @@ sleep 2
 touch /var/run/geoip_down_complete >/dev/null 2>&1
 sleep 2
 rm -rf /var/run/geoip_update >/dev/null 2>&1
-echo "" >/tmp/geoip_update.txt >/dev/null 2>&1
+echo "" >$LOG_UPDATE_GEOIP >/dev/null 2>&1
 
 if pidof clash >/dev/null; then
   /etc/init.d/clash restart 2>/dev/null

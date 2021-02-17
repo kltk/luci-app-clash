@@ -10,8 +10,6 @@ fi
 
 RULE_FILE_DIR="/etc/clash/ruleprovider/$RULE_FILE_NAME"
 TMP_RULE_DIR="/tmp/$RULE_FILE_NAME"
-LOG_FILE="/usr/share/clash/clash.txt"
-REAL_LOG="/usr/share/clash/clash_real.txt"
 
 url="https://cdn.jsdelivr.net/gh/$DOWNLOAD_PATH"
 behavior=$(grep -F $RULE_FILE_NAME /usr/share/clash/create/rule_provider.list | awk -F ',' '{print $2}' 2>/dev/null)

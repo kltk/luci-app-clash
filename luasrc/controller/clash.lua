@@ -2,7 +2,7 @@ module("luci.controller.clash", package.seeall)
 local fs=require"nixio.fs"
 local http=require"luci.http"
 local uci=require"luci.model.uci".cursor()
-
+local clashEnv = require "luci.clash_env"
 
 
 function index()
@@ -113,7 +113,7 @@ function action_update_rule()
 end
 
 function action_update()
-	luci.sys.exec("kill $(pgrep /usr/share/clash/update.sh) ; (bash /usr/share/clash/update.sh >/usr/share/clash/clash.txt 2>&1) &")
+	luci.sys.exec("kill $(pgrep /usr/share/clash/update.sh) ; (bash /usr/share/clash/update.sh >" .. clashEnv.logFile .. " 2>&1) &")
 end
 
 
@@ -254,7 +254,7 @@ end
 
 
 local function readlog()
-	return luci.sys.exec("sed -n '$p' /usr/share/clash/clash_real.txt 2>/dev/null")
+	return luci.sys.exec("sed -n '$p' " .. clashEnv.logReal .. " 2>/dev/null")
 end
 
 local function geo_data()
@@ -366,13 +366,13 @@ end
 
 function geoip_update()
 	fs.writefile("/var/run/geoiplog","0")
-	luci.sys.exec("(rm /var/run/geoip_update_error ;  touch /var/run/geoip_update ; sh /usr/share/clash/geoip.sh >/tmp/geoip_update.txt 2>&1  || touch /var/run/geoip_update_error ;rm /var/run/geoip_update) &")
+	luci.sys.exec("(rm /var/run/geoip_update_error ;  touch /var/run/geoip_update ; sh /usr/share/clash/geoip.sh >" .. clashEnv.logUpdateGeoip .. " 2>&1  || touch /var/run/geoip_update_error ;rm /var/run/geoip_update) &")
 end
 
 
 function do_update()
 	fs.writefile("/var/run/clashlog","0")
-	luci.sys.exec("(rm /var/run/core_update_error ;  touch /var/run/core_update ; sh /usr/share/clash/core_download.sh >/tmp/clash_update.txt 2>&1  || touch /var/run/core_update_error ;rm /var/run/core_update) &")
+	luci.sys.exec("(rm /var/run/core_update_error ;  touch /var/run/core_update ; sh /usr/share/clash/core_download.sh >" .. clashEnv.logUpdateClash .. " 2>&1  || touch /var/run/core_update_error ;rm /var/run/core_update) &")
 end
 
 function do_start()
@@ -394,7 +394,7 @@ end
 function check_update_log()
 	luci.http.prepare_content("text/plain; charset=utf-8")
 	local fdp=tonumber(fs.readfile("/var/run/clashlog")) or 0
-	local f=io.open("/tmp/clash_update.txt", "r+")
+	local f=io.open(clashEnv.logUpdateClash, "r+")
 	f:seek("set",fdp)
 	local a=f:read(2048000) or ""
 	fdp=f:seek()
@@ -410,7 +410,7 @@ end
 function check_geoip_log()
 	luci.http.prepare_content("text/plain; charset=utf-8")
 	local fdp=tonumber(fs.readfile("/var/run/geoiplog")) or 0
-	local f=io.open("/tmp/geoip_update.txt", "r+")
+	local f=io.open(clashEnv.logUpdateGeoip, "r+")
 	f:seek("set",fdp)
 	local a=f:read(2048000) or ""
 	fdp=f:seek()
@@ -427,7 +427,7 @@ end
 function logstatus_check()
 	luci.http.prepare_content("text/plain; charset=utf-8")
 	local fdp=tonumber(fs.readfile("/usr/share/clash/logstatus_check")) or 0
-	local f=io.open("/usr/share/clash/clash.txt", "r+")
+	local f=io.open(clashEnv.logFile, "r+")
 	f:seek("set",fdp)
 	local a=f:read(2048000) or ""
 	fdp=f:seek()

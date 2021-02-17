@@ -5,6 +5,7 @@ local HTTP = require "luci.http"
 local DISP = require "luci.dispatcher"
 local UTIL = require "luci.util"
 local fs = require "luci.clash"
+local clashEnv = require "luci.clash_env"
 local uci = require "luci.model.uci".cursor()
 local s, o, krk, z, r
 local http = luci.http
@@ -359,7 +360,7 @@ o.description = translate("Download Rule")
 o.inputstyle = "reload"
 o.write = function()
   uci:commit("clash")
-  luci.sys.call("bash /usr/share/clash/rule.sh >>/usr/share/clash/clash.txt >/dev/null 2>&1 &")
+  luci.sys.call("bash /usr/share/clash/rule.sh >>" .. clashEnv.logFile .. " >/dev/null 2>&1 &")
 end
 
 local rule = "/usr/share/clash/rule.yaml"

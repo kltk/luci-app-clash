@@ -1,5 +1,5 @@
 #!/bin/bash /etc/rc.common
-. /lib/functions.sh
+. /usr/lib/clash/functions.sh
 
 RULE_PROVIDER="/tmp/rule_provider.yaml"
 GROUP_FILE="/tmp/groups.yaml"
@@ -11,7 +11,6 @@ config_name=$(uci get clash.config.name_tag 2>/dev/null)
 lang=$(uci get luci.main.lang 2>/dev/null)
 CONFIG_YAML="/usr/share/clash/config/custom/${config_name}.yaml"
 check_name=$(grep -F "${config_name}.yaml" "/usr/share/clashbackup/create_list.conf")
-REAL_LOG="/usr/share/clash/clash_real.txt"
 same_tag=$(uci get clash.config.same_tag 2>/dev/null)
 rcount=$(grep -c "config ruleprovider" $CFG_FILE 2>/dev/null)
 create=$(uci get clash.config.provider_config 2>/dev/null)
@@ -25,12 +24,12 @@ if [ "${create}" -eq 1 ]; then
     if [ $config_name == "" ] || [ -z $config_name ]; then
 
       if [ $lang == "en" ] || [ $lang == "auto" ]; then
-        echo "Tag Your Config" >$REAL_LOG
+        echo "Tag Your Config" >$LOG_REAL
       elif [ $lang == "zh_cn" ]; then
-        echo "标记您的配置" >$REAL_LOG
+        echo "标记您的配置" >$LOG_REAL
       fi
       sleep 5
-      echo "Clash for OpenWRT" >$REAL_LOG
+      echo "Clash for OpenWRT" >$LOG_REAL
       exit 0
 
     fi
@@ -38,12 +37,12 @@ if [ "${create}" -eq 1 ]; then
     if [ ! -z $check_name ] && [ "${same_tag}" -eq 0 ]; then
 
       if [ $lang == "en" ] || [ $lang == "auto" ]; then
-        echo "Config with same name exist, please rename tag and create again" >$REAL_LOG
+        echo "Config with same name exist, please rename tag and create again" >$LOG_REAL
       elif [ $lang == "zh_cn" ]; then
-        echo "已存在同名配置，请重命名标记,重新创建配置" >$REAL_LOG
+        echo "已存在同名配置，请重命名标记,重新创建配置" >$LOG_REAL
       fi
       sleep 5
-      echo "Clash for OpenWRT" >$REAL_LOG
+      echo "Clash for OpenWRT" >$LOG_REAL
       exit 0
     fi
 
@@ -76,7 +75,7 @@ if [ "${create}" -eq 1 ]; then
 				  $name:
 				    type: $type
 				    behavior: $behavior
-				    path: $path 
+				    path: $path
 			EOF
 
       if [ "$type" == "http" ]; then
@@ -752,7 +751,6 @@ if [ "${create}" -eq 1 ]; then
     fi
 
     lang=$(uci get luci.main.lang 2>/dev/null)
-    REAL_LOG="/usr/share/clash/clash_real.txt"
 
     mode=$(uci get clash.config.mode 2>/dev/null)
     p_mode=$(uci get clash.config.p_mode 2>/dev/null)
@@ -809,7 +807,7 @@ if [ "${create}" -eq 1 ]; then
 
     if [ "$interf" -eq 1 ] && [ ! -z "$interf_name" ]; then
       cat >>"/tmp/interf_name.yaml" <<-EOF
-				interface-name: ${interf_name} 
+				interface-name: ${interf_name}
 			EOF
       cat /tmp/interf_name.yaml >>$TEMP_FILE 2>/dev/null
       sed -i -e "\$a " $TEMP_FILE 2>/dev/null
@@ -843,19 +841,19 @@ if [ "${create}" -eq 1 ]; then
 
       cat >>"/tmp/tun.yaml" <<-EOF
 				tun:
-				  enable: true  
+				  enable: true
 			EOF
 
       if [ $core -eq 4 ]; then
         cat >>"/tmp/tun.yaml" <<-EOF
-					  stack: ${stack}   
+					  stack: ${stack}
 				EOF
       fi
 
       if [ $core -eq 3 ]; then
         cat >>"/tmp/tun.yaml" <<-EOF
 					  device-url: dev://utun
-					  dns-listen: 0.0.0.0:${listen_port}   
+					  dns-listen: 0.0.0.0:${listen_port}
 				EOF
       fi
 
@@ -926,7 +924,7 @@ if [ "${create}" -eq 1 ]; then
     cat >>"/tmp/enable_dns.yaml" <<-EOF
 			dns:
 			  enable: true
-			  listen: 0.0.0.0:${listen_port}   
+			  listen: 0.0.0.0:${listen_port}
 		EOF
 
     if [ "$enable_ipv6" == "true" ]; then
@@ -1102,13 +1100,13 @@ if [ "${create}" -eq 1 ]; then
     rm -rf $RULE_PROVIDER $PROVIDER_FILE $GROUP_FILE $RULE_FILE $SERVER_FILE $Proxy_Group
 
     if [ $lang == "en" ] || [ $lang == "auto" ]; then
-      echo "Completed Creating Custom Config " >$REAL_LOG
+      echo "Completed Creating Custom Config " >$LOG_REAL
       sleep 1
-      echo "Clash for OpenWRT" >$REAL_LOG
+      echo "Clash for OpenWRT" >$LOG_REAL
     elif [ $lang == "zh_cn" ]; then
-      echo "创建自定义配置完成." >$REAL_LOG
+      echo "创建自定义配置完成." >$LOG_REAL
       sleep 1
-      echo "Clash for OpenWRT" >$REAL_LOG
+      echo "Clash for OpenWRT" >$LOG_REAL
     fi
 
     use=$(uci get clash.config.use_config 2>/dev/null)

@@ -7,19 +7,18 @@ v2_url=$(uci get clash.config.v2_url 2>/dev/null)
 
 config_name=$(uci get clash.config.config_name 2>/dev/null)
 subtype=$(uci get clash.config.subcri 2>/dev/null)
-REAL_LOG="/usr/share/clash/clash_real.txt"
 lang=$(uci get luci.main.lang 2>/dev/null)
 CONFIG_YAML="/usr/share/clash/config/sub/${config_name}.yaml"
 
 if [ $config_name == "" ] || [ -z $config_name ]; then
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Tag Your Config" >$REAL_LOG
+    echo "Tag Your Config" >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "标记您的配置" >$REAL_LOG
+    echo "标记您的配置" >$LOG_REAL
   fi
   sleep 5
-  echo "Clash for OpenWRT" >$REAL_LOG
+  echo "Clash for OpenWRT" >$LOG_REAL
   exit 0
 
 fi
@@ -33,20 +32,20 @@ check_name=$(grep -F "${config_name}.yaml" "/usr/share/clashbackup/confit_list.c
 if [ ! -z $check_name ]; then
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Config with same name exist, please rename and download again" >$REAL_LOG
+    echo "Config with same name exist, please rename and download again" >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "已存在同名配置，请重命名名配置重新下载" >$REAL_LOG
+    echo "已存在同名配置，请重命名名配置重新下载" >$LOG_REAL
   fi
   sleep 5
-  echo "Clash for OpenWRT" >$REAL_LOG
+  echo "Clash for OpenWRT" >$LOG_REAL
   exit 0
 
 else
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Downloading Configuration..." >$REAL_LOG
+    echo "Downloading Configuration..." >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "开始下载配置" >$REAL_LOG
+    echo "开始下载配置" >$LOG_REAL
   fi
   sleep 1
 
@@ -110,13 +109,13 @@ else
   fi
 
   if [ $lang == "en" ] || [ $lang == "auto" ]; then
-    echo "Downloading Configuration Completed" >$REAL_LOG
+    echo "Downloading Configuration Completed" >$LOG_REAL
     sleep 2
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
   elif [ $lang == "zh_cn" ]; then
-    echo "下载配置完成" >$REAL_LOG
+    echo "下载配置完成" >$LOG_REAL
     sleep 2
-    echo "Clash for OpenWRT" >$REAL_LOG
+    echo "Clash for OpenWRT" >$LOG_REAL
   fi
 
 fi
